@@ -4,6 +4,7 @@ const moment = require('moment');
 
 const data = { jobs: [] };
 // Create 100 jobs
+moment.locale('en-gb');
 for (let i = 0; i < 1000; i += 1) {
   data.jobs.push({
     id: i,

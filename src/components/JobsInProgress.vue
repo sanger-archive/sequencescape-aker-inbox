@@ -26,6 +26,9 @@
              ref="qjt"
              :perPage="perPage"
              :current-page="currentPage"
+             :sort-by.sync="sortBy"
+             :sort-desc.sync="sortDesc"
+             no-provider-sorting
     >
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
@@ -39,7 +42,7 @@
       <template slot="row-details" slot-scope="row">
         <b-card>
           <ul>
-            <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+            <li v-for="(label, key) in detailedItems" :key="key"><strong>{{ label }}</strong>: {{ row.item[key] }}</li>
           </ul>
         </b-card>
       </template>
@@ -76,9 +79,10 @@ export default {
         { key: 'dateRequested', label: 'Date requested', sortable: true, class: 'text-center' },
         { key: 'startDate', label: 'Date started', sortable: true, class: 'text-center' },
         { key: 'requestedBy', label: 'Requested by', sortable: true },
+        { key: 'project', label: 'SS Study', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
         { key: 'productOptions', label: 'Product options', sortable: true },
-        { key: 'batchSize', label: 'Batch size', sortable: true },
+        { key: 'batchSize', label: '# samples', sortable: true },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
       ],
@@ -88,7 +92,15 @@ export default {
       pageOptions: [5, 10, 15],
       totalStartedJobs: 0,
       sortBy: 'dateRequested',
+      sortDesc: false,
       items: [],
+      detailedItems: {
+        desiredDate: 'Desired Date',
+        barcode: 'Barcode',
+        comments: 'Comment',
+        completedDate: 'Completed Date',
+        cancelledDate: 'Cancelled Date',
+      },
     };
   },
   methods: {
