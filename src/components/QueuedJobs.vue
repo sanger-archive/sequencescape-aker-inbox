@@ -42,7 +42,7 @@
       <template slot="row-details" slot-scope="row">
         <b-card>
           <ul>
-            <li v-for="(label, key) in detailedItems" :key="key"><strong>{{ key }}</strong>: {{ row.item[key] }}</li>
+            <li v-for="(label, key) in detailedItems" :key="key"><strong>{{ label }}</strong> {{ row.item[key] }}</li>
           </ul>
         </b-card>
       </template>
@@ -73,15 +73,14 @@ export default {
   data() {
     return {
       fields: [
-        { key: 'index', label: '', sortable: true },
         { key: 'id', label: 'ID', sortable: true },
-        { key: 'woNum', label: 'WO', sortable: true },
-        { key: 'dateRequested', label: 'Date requested', sortable: true, class: 'text-center' },
-        { key: 'requestedBy', label: 'Requested by', sortable: true },
+        { key: 'work-order-id', label: 'WO', sortable: true },
+        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
+        { key: 'requested-by', label: 'Requested by', sortable: true },
         { key: 'project', label: 'SS Study', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
-        { key: 'productOptions', label: 'Product options', sortable: true },
-        { key: 'batchSize', label: '# samples', sortable: true },
+        { key: 'product-options', label: 'Product options', sortable: true },
+        { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
       ],
@@ -90,16 +89,13 @@ export default {
       perPage: 5,
       pageOptions: [5, 10, 15],
       totalQueuedJobs: 0,
-      sortBy: 'dateRequested',
+      sortBy: 'date-requested',
       sortDesc: false,
       items: [],
       detailedItems: {
-        desiredDate: 'Desired Date',
+        'desired-date': 'Desired Date',
         barcode: 'Barcode',
-        comments: 'Comment',
-        startDate: 'Start Date',
-        completedDate: 'Completed Date',
-        cancelledDate: 'Cancelled Date',
+        comment: 'Comment',
       },
     };
   },
@@ -116,13 +112,11 @@ export default {
     queuedJobsProvider(ctx) {
       this.isBusy = true;
       return axios({
-        url: 'http://localhost:3000/'
-              + 'jobs'
-              + '?startDate'
-              + '&completedDate'
-              + '&cancelledDate'
-              + `&_page=${ctx.currentPage}`
-              + `&_limit=${ctx.perPage}`,
+        url: 'http://localhost:3200/api/v1/jobs'
+              + '?filter[status]=queued',
+              // + `?page[limit]=${ctx.perPage}`,
+              // + `?page[number]=${ctx.currentPage}`,
+
         method: 'GET',
       })
         .then((response) => {

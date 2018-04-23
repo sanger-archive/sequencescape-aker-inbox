@@ -65,17 +65,16 @@ export default {
   data() {
     return {
       fields: [
-        { key: 'index', label: '', sortable: true },
         { key: 'id', label: 'ID', sortable: true },
-        { key: 'woNum', label: 'WO', sortable: true },
-        { key: 'dateRequested', label: 'Date requested', sortable: true, class: 'text-center' },
-        { key: 'completedDate', label: 'Date completed', sortable: true, class: 'text-center' },
-        { key: 'cancelledDate', label: 'Date cancelled', sortable: true, class: 'text-center' },
-        { key: 'requestedBy', label: 'Requested by', sortable: true },
+        { key: 'work-order-id', label: 'WO', sortable: true },
+        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
+        { key: 'completed', label: 'Date completed', sortable: true, class: 'text-center' },
+        { key: 'cancelled', label: 'Date cancelled', sortable: true, class: 'text-center' },
+        { key: 'requested-by', label: 'Requested by', sortable: true },
         { key: 'project', label: 'SS Study', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
-        { key: 'productOptions', label: 'Product options', sortable: true },
-        { key: 'batchSize', label: '# samples', sortable: true },
+        { key: 'product-options', label: 'Product options', sortable: true },
+        { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
       ],
@@ -84,14 +83,14 @@ export default {
       perPage: 5,
       pageOptions: [5, 10, 15],
       totalCompletedJobs: 0,
-      sortBy: 'dateRequested',
+      sortBy: 'date-requested',
       sortDesc: false,
       items: [],
       detailedItems: {
-        desiredDate: 'Desired Date',
+        'desired-date': 'Desired Date',
         barcode: 'Barcode',
-        comments: 'Comment',
-        startDate: 'Start Date',
+        comment: 'Comment',
+        started: 'Start Date',
       },
     };
   },
@@ -105,13 +104,10 @@ export default {
     completedJobsProvider(ctx) {
       this.isBusy = true;
       return axios({
-        url: 'http://localhost:3000/'
-              + 'jobs'
-              + '?startDate_gte=1'
-              + '&completedDate_gte=1'
-              + '&cancelledDate_gte=1'
-              + `&_page=${ctx.currentPage}`
-              + `&_limit=${ctx.perPage}`,
+        url: 'http://localhost:3200/api/v1/jobs'
+              + '?filter[status]=concluded',
+              // + `?page[limit]=${ctx.perPage}`,
+              // + `?page[number]=${ctx.currentPage}`,
         method: 'GET',
       })
         .then((response) => {
