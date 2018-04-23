@@ -108,14 +108,18 @@ export default {
         url: 'http://localhost:3000/'
               + 'jobs'
               + '?startDate_gte=1'
-              // + '&completedDate_gte=1'
-              // + '&cancelledDate_gte=1'
+              + '&completedDate_gte=1'
+              + '&cancelledDate_gte=1'
               + `&_page=${ctx.currentPage}`
               + `&_limit=${ctx.perPage}`,
         method: 'GET',
       })
         .then((response) => {
-          const items = response.data.map(item => Object.assign({ selected: false }, item));
+          const items = response.data.data.map((item) => {
+            const formattedItem = Object.assign({ selected: false }, item, item.attributes);
+            delete formattedItem.attributes;
+            return formattedItem;
+          });
           this.items = items;
           if (response.headers['x-total-count']) {
             this.totalCompletedJobs = parseInt(response.headers['x-total-count'], 10);

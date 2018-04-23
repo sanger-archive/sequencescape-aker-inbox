@@ -123,7 +123,11 @@ export default {
         method: 'GET',
       })
         .then((response) => {
-          const items = response.data.map(item => Object.assign({ selected: false }, item));
+          const items = response.data.data.map((item) => {
+            const formattedItem = Object.assign({ selected: false }, item, item.attributes);
+            delete formattedItem.attributes;
+            return formattedItem;
+          });
           this.items = items;
           if (response.headers['x-total-count']) {
             this.totalStartedJobs = parseInt(response.headers['x-total-count'], 10);

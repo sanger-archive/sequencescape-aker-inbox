@@ -2,25 +2,28 @@ const jsonServer = require('json-server');
 const faker = require('faker');
 const moment = require('moment');
 
-const data = { jobs: [] };
+const data = { jobs: { data: [] } };
 // Create 100 jobs
 moment.locale('en-gb');
-for (let i = 0; i < 1000; i += 1) {
-  data.jobs.push({
+for (let i = 0; i < 10; i += 1) {
+  data.jobs.data.push({
     id: i,
-    dateRequested: moment(faker.date.past()).format('L'),
-    requestedBy: faker.internet.email(),
-    project: `Project ${faker.random.number({ min: 1, max: 100 })}`,
-    desiredDate: moment(faker.date.future()).format('L'),
-    woNum: faker.random.number({ min: 1, max: 100 }),
-    product: faker.commerce.productName(),
-    productOptions: faker.commerce.productMaterial(),
-    batchSize: faker.random.number({ min: 1, max: 100 }),
-    barcode: faker.random.uuid(),
-    comments: faker.hacker.phrase(),
-    startDate: faker.random.number({ min: 1, max: 10 }) > 5 ? moment(faker.date.future()).format('L') : '',
-    completedDate: faker.random.number({ min: 1, max: 10 }) > 5 ? moment(faker.date.past()).format('L') : '',
-    cancelledDate: faker.random.number({ min: 1, max: 10 }) > 5 ? moment(faker.date.past()).format('L') : '',
+    type: "jobs",
+    attributes: {
+      dateRequested: moment(faker.date.past()).format('L'),
+      requestedBy: faker.internet.email(),
+      project: `Project ${faker.random.number({ min: 1, max: 100 })}`,
+      desiredDate: moment(faker.date.future()).format('L'),
+      woNum: faker.random.number({ min: 1, max: 100 }),
+      product: faker.commerce.productName(),
+      productOptions: faker.commerce.productMaterial(),
+      batchSize: faker.random.number({ min: 1, max: 100 }),
+      barcode: faker.random.uuid(),
+      comments: faker.hacker.phrase(),
+      startDate: faker.random.number({ min: 1, max: 10 }) > 5 ? moment(faker.date.future()).format('L') : '',
+      completedDate: faker.random.number({ min: 1, max: 10 }) > 5 ? moment(faker.date.past()).format('L') : '',
+      cancelledDate: faker.random.number({ min: 1, max: 10 }) > 5 ? moment(faker.date.past()).format('L') : '',
+    }
   });
 }
 
