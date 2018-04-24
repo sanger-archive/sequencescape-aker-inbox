@@ -111,9 +111,9 @@ export default {
       this.isBusy = true;
       return axios({
         url: 'http://localhost:3200/api/v1/jobs'
-              + '?filter[status]=active',
-              // + `&_page=${ctx.currentPage}`
-              // + `&_limit=${ctx.perPage}`,
+              + '?filter[status]=active'
+              + `&page[number]=${ctx.currentPage}`
+              + `&page[size]=${ctx.perPage}`,
         method: 'GET',
       })
         .then((response) => {
