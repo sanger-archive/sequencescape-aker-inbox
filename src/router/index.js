@@ -24,6 +24,7 @@ const ifAuthenticated = (to, from, next) => {
 
 export default new Router({
   mode: 'history',
+  base: '/sequencescape-inbox/',
   routes: [
     {
       path: '/',
