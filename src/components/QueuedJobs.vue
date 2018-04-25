@@ -125,8 +125,8 @@ export default {
             return formattedItem;
           });
           this.items = items;
-          if (response.headers['x-total-count']) {
-            this.totalQueuedJobs = parseInt(response.headers['x-total-count'], 10);
+          if (response.data.meta['record-count']) {
+            this.totalQueuedJobs = response.data.meta['record-count'];
           }
           this.isBusy = false;
           return items;
