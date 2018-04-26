@@ -112,7 +112,7 @@ export default {
     queuedJobsProvider(ctx) {
       this.isBusy = true;
       return axios({
-        url: 'http://localhost:3200/api/v1/jobs'
+        url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
               + '?filter[status]=queued'
               + `&page[number]=${ctx.currentPage}`
               + `&page[size]=${ctx.perPage}`,
