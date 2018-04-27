@@ -66,6 +66,8 @@
 <script>
 import axios from 'axios';
 
+axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
+
 const moment = require('moment');
 
 export default {
@@ -137,11 +139,8 @@ export default {
       this.items.forEach((item) => {
         if (item.selected) {
           axios({
-            method: 'patch',
-            url: `http://localhost:3000/jobs/${item.id}`,
-            data: {
-              cancelledDate: moment().format('lll'),
-            },
+            method: 'put',
+            url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${item.id}/cancel`,
           })
             .then(() => {
               this.refreshTable();
@@ -156,11 +155,8 @@ export default {
       this.items.forEach((item) => {
         if (item.selected) {
           axios({
-            method: 'patch',
-            url: `http://localhost:3000/jobs/${item.id}`,
-            data: {
-              completedDate: moment().format('lll'),
-            },
+            method: 'put',
+            url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${item.id}/complete`,
           })
             .then(() => {
               this.refreshTable();
