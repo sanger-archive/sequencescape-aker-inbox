@@ -12,6 +12,11 @@ if (!process.env.WORK_ORDER_URL) {
   process.env.WORK_ORDER_URL = JSON.parse(config.dev.env.WORK_ORDER_URL)
 }
 
+if (!process.env.ROOT_PATH) {
+  process.env.ROOT_PATH = JSON.parse(config.dev.env.ROOT_PATH)
+}
+
+
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
