@@ -30,7 +30,7 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
-app.put('/jobs/:job_id/start', (req, res) => {
+app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   return axios({
     method: 'put',
     url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
@@ -42,10 +42,10 @@ app.put('/jobs/:job_id/start', (req, res) => {
   })
 });
 
-app.put('/jobs/:job_id/complete', (req, res) => {
+app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
   res.json({message: 'Completed job in SS'});
 });
-app.put('/jobs/:job_id/cancel', (req, res) => {
+app.put(`${process.env.ROOT_PATH}/jobs/:job_id/cancel`, (req, res) => {
   res.json({message: 'Cancelled job in SS'});
 });
 

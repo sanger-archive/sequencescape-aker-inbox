@@ -130,38 +130,6 @@ export default {
           return [];
         });
     },
-    cancelJobs() {
-      this.items.forEach((item) => {
-        if (item.selected) {
-          axios({
-            method: 'put',
-            url: `/jobs/${item.id}/cancel`,
-          })
-            .then(() => {
-              this.refreshTable();
-              this.refreshCompletedJobsTable();
-            }).catch((error) => {
-              console.log(error);
-            });
-        }
-      });
-    },
-    finishJobs() {
-      this.items.forEach((item) => {
-        if (item.selected) {
-          axios({
-            method: 'put',
-            url: `/jobs/${item.id}/complete`,
-          })
-            .then(() => {
-              this.refreshTable();
-              this.refreshCompletedJobsTable();
-            }).catch((error) => {
-              console.log(error);
-            });
-        }
-      });
-    },
     toggleSelectedJob(item, index, event) {
       this.items.forEach((itemInArray) => {
         if (itemInArray.id === item.id) item.selected = event;
