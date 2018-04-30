@@ -4,6 +4,7 @@ var axios = require('axios');
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
 var config = require('../config')
+
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
@@ -15,7 +16,6 @@ if (!process.env.WORK_ORDER_URL) {
 if (!process.env.ROOT_PATH) {
   process.env.ROOT_PATH = JSON.parse(config.dev.env.ROOT_PATH)
 }
-
 
 var opn = require('opn')
 var path = require('path')
@@ -39,6 +39,9 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   return axios({
     method: 'put',
     url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
+    })
   })
   .then((response) => {
     return res.json(response.data);
