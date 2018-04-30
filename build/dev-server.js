@@ -23,6 +23,18 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+app.get('/jobs', (req, res) => {
+})
+app.put('/jobs/:job_id/start', (req, res) => {
+  res.json({message: 'started job'})
+});
+app.put('/jobs/:job_id/complete', (req, res) => {
+  res.json({message: 'completed job'})
+});
+app.put('/jobs/:job_id/cancel', (req, res) => {
+  res.json({message: 'cancelled job'})
+});
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
@@ -81,6 +93,7 @@ devMiddleware.waitUntilValid(() => {
   }
   _resolve()
 })
+
 
 var server = app.listen(port)
 

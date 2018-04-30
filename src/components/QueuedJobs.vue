@@ -142,7 +142,7 @@ export default {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${item.id}/cancel`,
+            url: `/jobs/${item.id}/cancel`,
           })
             .then(() => {
               this.refreshTable();
