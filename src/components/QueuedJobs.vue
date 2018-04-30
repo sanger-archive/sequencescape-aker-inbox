@@ -158,7 +158,7 @@ export default {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${item.id}/start`,
+            url: `/jobs/${item.id}/start`,
           })
             .then(() => {
               this.refreshTable();
