@@ -26,6 +26,10 @@
              ref="qjt"
              :perPage="perPage"
              :current-page="currentPage"
+             :detailedItems="detailedItems"
+             :sort-by.sync="sortBy"
+             :sort-desc.sync="sortDesc"
+             no-provider-sorting
     >
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
@@ -39,7 +43,7 @@
       <template slot="row-details" slot-scope="row">
         <b-card>
           <ul>
-            <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+            <li v-for="(label, key) in detailedItems" :key="key"><strong>{{ label }}</strong>: {{ row.item[key] }}</li>
           </ul>
         </b-card>
       </template>
@@ -54,6 +58,9 @@
 <script>
 import axios from 'axios';
 
+axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
+
+
 const moment = require('moment');
 
 export default {
@@ -61,17 +68,16 @@ export default {
   data() {
     return {
       fields: [
-        { key: 'index', label: '', sortable: true },
         { key: 'id', label: 'ID', sortable: true },
-        { key: 'woNum', label: 'WO', sortable: true },
-        { key: 'dateRequested', label: 'Date requested', sortable: true, class: 'text-center' },
-        { key: 'startDate', label: 'Date started', sortable: true, class: 'text-center' },
-        { key: 'completedDate', label: 'Date completed', sortable: true, class: 'text-center' },
-        { key: 'cancelledDate', label: 'Date cancelled', sortable: true, class: 'text-center' },
-        { key: 'requestedBy', label: 'Requested by', sortable: true },
+        { key: 'work-order-id', label: 'WO', sortable: true },
+        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
+        { key: 'completed', label: 'Date completed', sortable: true, class: 'text-center' },
+        { key: 'cancelled', label: 'Date cancelled', sortable: true, class: 'text-center' },
+        { key: 'requested-by', label: 'Requested by', sortable: true },
+        { key: 'project', label: 'SS Study', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
-        { key: 'productOptions', label: 'Product options', sortable: true },
-        { key: 'batchSize', label: 'Batch size', sortable: true },
+        { key: 'process', label: 'Process', sortable: true },
+        { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
       ],
@@ -80,8 +86,15 @@ export default {
       perPage: 5,
       pageOptions: [5, 10, 15],
       totalCompletedJobs: 0,
-      sortBy: 'dateRequested',
+      sortBy: 'date-requested',
+      sortDesc: false,
       items: [],
+      detailedItems: {
+        'desired-date': 'Desired Date',
+        barcode: 'Barcode',
+        comment: 'Comment',
+        started: 'Start Date',
+      },
     };
   },
   methods: {
@@ -94,20 +107,21 @@ export default {
     completedJobsProvider(ctx) {
       this.isBusy = true;
       return axios({
-        url: 'http://localhost:3000/'
-              + 'jobs'
-              + '?startDate_gte=1'
-              + '&completedDate_gte=1'
-              + '&cancelledDate_gte=1'
-              + `&_page=${ctx.currentPage}`
-              + `&_limit=${ctx.perPage}`,
+        url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
+              + '?filter[status]=concluded'
+              + `&page[number]=${ctx.currentPage}`
+              + `&page[size]=${ctx.perPage}`,
         method: 'GET',
       })
         .then((response) => {
-          const items = response.data.map(item => Object.assign({ selected: false }, item));
+          const items = response.data.data.map((item) => {
+            const formattedItem = Object.assign({ selected: false }, item, item.attributes);
+            delete formattedItem.attributes;
+            return formattedItem;
+          });
           this.items = items;
-          if (response.headers['x-total-count']) {
-            this.totalCompletedJobs = parseInt(response.headers['x-total-count'], 10);
+          if (response.data.meta['record-count']) {
+            this.totalCompletedJobs = response.data.meta['record-count'];
           }
           this.isBusy = false;
           return items;
@@ -120,11 +134,8 @@ export default {
       this.items.forEach((item) => {
         if (item.selected) {
           axios({
-            method: 'patch',
-            url: `http://localhost:3000/jobs/${item.id}`,
-            data: {
-              cancelledDate: moment().format('lll'),
-            },
+            method: 'put',
+            url: `/jobs/${item.id}/cancel`,
           })
             .then(() => {
               this.refreshTable();
@@ -139,11 +150,8 @@ export default {
       this.items.forEach((item) => {
         if (item.selected) {
           axios({
-            method: 'patch',
-            url: `http://localhost:3000/jobs/${item.id}`,
-            data: {
-              completedDate: moment().format('lll'),
-            },
+            method: 'put',
+            url: `/jobs/${item.id}/complete`,
           })
             .then(() => {
               this.refreshTable();

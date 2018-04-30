@@ -14,16 +14,22 @@ const ifNotAuthenticated = (to, from, next) => {
   next('/');
 };
 
-const ifAuthenticated = (to, from, next) => {
-  if (store.getters.isAuthenticated) {
-    next();
-    return;
-  }
-  next('/login');
-};
+// const ifAuthenticated = (to, from, next) => {
+//   if (store.getters.isAuthenticated) {
+//     next();
+//     return;
+//   }
+//   next('/login');
+// };
+
+function ifAuthenticated(to, from, next) {
+  next();
+  return true;
+}
 
 export default new Router({
   mode: 'history',
+  base: '/sequencescape-inbox/',
   routes: [
     {
       path: '/',
