@@ -1,8 +1,15 @@
 require('./check-versions')()
 
+var axios = require('axios');
+axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
+
 var config = require('../config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+}
+
+if (!process.env.WORK_ORDER_URL) {
+  process.env.WORK_ORDER_URL = JSON.parse(config.dev.env.WORK_ORDER_URL)
 }
 
 var opn = require('opn')
@@ -23,6 +30,25 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+app.put('/jobs/:job_id/start', (req, res) => {
+  return axios({
+    method: 'put',
+    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
+  })
+  .then((response) => {
+    return res.json(response.data);
+  }).catch((error) => {
+    return res.json({error: 'There has been a problem.'});
+  })
+});
+
+app.put('/jobs/:job_id/complete', (req, res) => {
+  res.json({message: 'Completed job in SS'});
+});
+app.put('/jobs/:job_id/cancel', (req, res) => {
+  res.json({message: 'Cancelled job in SS'});
+});
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
@@ -81,6 +107,7 @@ devMiddleware.waitUntilValid(() => {
   }
   _resolve()
 })
+
 
 var server = app.listen(port)
 
