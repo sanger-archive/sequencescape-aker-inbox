@@ -20,6 +20,8 @@ describe('Inbox.vue', () => {
     expect(vm.$el.textContent).to.include('Queued jobs');
     expect(vm.$el.textContent).to.include('Jobs in progress');
     expect(vm.$el.textContent).to.include('Completed jobs');
+
+    expect(vm.$options.beforeCreate).to.be.defined;
   })
 
 });
