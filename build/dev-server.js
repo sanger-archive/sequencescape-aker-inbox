@@ -33,12 +33,13 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = config.dev.proxyTable
-
+const https = require('https')
 var app = express()
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   return axios({
-    method: 'put',
+    method: 'PUT',
     url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
+    proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
     })
