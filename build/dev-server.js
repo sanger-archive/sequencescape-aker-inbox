@@ -34,11 +34,13 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = config.dev.proxyTable
 const https = require('https')
+
 var app = express()
+
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
+    url: `http://localhost:3000/aker/jobs/${req.params.job_id}/start`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
@@ -52,10 +54,35 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
 });
 
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
-  res.json({message: 'Completed job in SS'});
+  return axios({
+    method: 'PUT',
+    url: `http://localhost:3000/aker/jobs/${req.params.job_id}/complete`,
+    proxy: false,
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
+    })
+  })
+  .then((response) => {
+    return res.json(response.data);
+  }).catch((error) => {
+    return res.json({error: 'There has been a problem.'});
+  })
 });
+
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/cancel`, (req, res) => {
-  res.json({message: 'Cancelled job in SS'});
+  return axios({
+    method: 'PUT',
+    url: `http://localhost:3000/aker/jobs/${req.params.job_id}/cancel`,
+    proxy: false,
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
+    })
+  })
+  .then((response) => {
+    return res.json(response.data);
+  }).catch((error) => {
+    return res.json({error: 'There has been a problem.'});
+  })
 });
 
 var compiler = webpack(webpackConfig)

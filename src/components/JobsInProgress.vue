@@ -55,8 +55,8 @@
       <b-button variant="danger" @click="cancelJobs()" :disabled="!jobsSelected">
           Cancel jobs
       </b-button>
-      <b-button variant="success" @click="finishJobs()" :disabled="!jobsSelected">
-          Finish jobs
+      <b-button variant="success" @click="completeJobs()" :disabled="!jobsSelected">
+          Complete jobs
       </b-button>
     </div>
 
@@ -151,7 +151,7 @@ export default {
         }
       });
     },
-    finishJobs() {
+    completeJobs() {
       this.items.forEach((item) => {
         if (item.selected) {
           axios({

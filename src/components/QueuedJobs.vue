@@ -52,9 +52,6 @@
         Refresh
     </b-button>
     <div class="float-right">
-      <b-button variant="danger" @click="cancelJobs()" :disabled="!jobsSelected">
-          Cancel jobs
-      </b-button>
       <b-button variant="success" @click="startJobs()" :disabled="!jobsSelected">
           Start jobs
       </b-button>
@@ -136,22 +133,6 @@ export default {
           this.isBusy = false;
           return [];
         });
-    },
-    cancelJobs() {
-      this.items.forEach((item) => {
-        if (item.selected) {
-          axios({
-            method: 'put',
-            url: `${process.env.ROOT_PATH}/jobs/${item.id}/cancel`,
-          })
-            .then(() => {
-              this.refreshTable();
-              this.refreshCompletedJobsTable();
-            }).catch((error) => {
-              console.log(error);
-            });
-        }
-      });
     },
     startJobs() {
       this.items.forEach((item) => {
