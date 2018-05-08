@@ -17,6 +17,10 @@ if (!process.env.ROOT_PATH) {
   process.env.ROOT_PATH = JSON.parse(config.dev.env.ROOT_PATH)
 }
 
+if (!process.env.SS_URL) {
+  process.env.SS_URL = JSON.parse(config.dev.env.SS_URL)
+}
+
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
@@ -40,7 +44,7 @@ var app = express()
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/start`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
@@ -56,7 +60,7 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/complete`,
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/complete`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
@@ -72,7 +76,7 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/cancel`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/cancel`,
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/cancel`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
