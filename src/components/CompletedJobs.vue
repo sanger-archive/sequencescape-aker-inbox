@@ -60,8 +60,11 @@ import axios from 'axios';
 
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
-
 const moment = require('moment');
+
+function translateDate(value) {
+  return ((value == null) ? '' : moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss'));
+}
 
 export default {
   name: 'completed-jobs',
@@ -70,9 +73,9 @@ export default {
       fields: [
         { key: 'id', label: 'ID', sortable: true },
         { key: 'work-order-id', label: 'WO', sortable: true },
-        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
-        { key: 'completed', label: 'Date completed', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
-        { key: 'cancelled', label: 'Date cancelled', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
+        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: translateDate },
+        { key: 'completed', label: 'Date completed', sortable: true, class: 'text-center', formatter: translateDate },
+        { key: 'cancelled', label: 'Date cancelled', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'requested-by', label: 'Requested by', sortable: true },
         { key: 'project', label: 'Aker project', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
