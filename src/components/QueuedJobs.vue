@@ -76,7 +76,7 @@ export default {
         { key: 'work-order-id', label: 'WO', sortable: true },
         { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
         { key: 'requested-by', label: 'Requested by', sortable: true },
-        { key: 'project', label: 'SS Study', sortable: true },
+        { key: 'project', label: 'Aker project', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
         { key: 'process', label: 'Process', sortable: true },
         { key: 'batch-size', label: '# samples', sortable: true },

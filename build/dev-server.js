@@ -40,7 +40,7 @@ var app = express()
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `http://localhost:3000/aker/jobs/${req.params.job_id}/start`,
+    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
@@ -56,7 +56,7 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `http://localhost:3000/aker/jobs/${req.params.job_id}/complete`,
+    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/complete`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
@@ -72,7 +72,7 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
 app.put(`${process.env.ROOT_PATH}/jobs/:job_id/cancel`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `http://localhost:3000/aker/jobs/${req.params.job_id}/cancel`,
+    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/cancel`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
