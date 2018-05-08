@@ -4,12 +4,21 @@ var axios = require('axios');
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
 var config = require('../config')
+
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
 
 if (!process.env.WORK_ORDER_URL) {
   process.env.WORK_ORDER_URL = JSON.parse(config.dev.env.WORK_ORDER_URL)
+}
+
+if (!process.env.ROOT_PATH) {
+  process.env.ROOT_PATH = JSON.parse(config.dev.env.ROOT_PATH)
+}
+
+if (!process.env.SS_URL) {
+  process.env.SS_URL = JSON.parse(config.dev.env.SS_URL)
 }
 
 var opn = require('opn')
@@ -28,12 +37,18 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = config.dev.proxyTable
+const https = require('https')
 
 var app = express()
-app.put('/jobs/:job_id/start', (req, res) => {
+
+app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   return axios({
-    method: 'put',
-    url: `${process.env.WORK_ORDER_URL}/api/v1/jobs/${req.params.job_id}/start`,
+    method: 'PUT',
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/start`,
+    proxy: false,
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
+    })
   })
   .then((response) => {
     return res.json(response.data);
@@ -42,11 +57,36 @@ app.put('/jobs/:job_id/start', (req, res) => {
   })
 });
 
-app.put('/jobs/:job_id/complete', (req, res) => {
-  res.json({message: 'Completed job in SS'});
+app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
+  return axios({
+    method: 'PUT',
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/complete`,
+    proxy: false,
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
+    })
+  })
+  .then((response) => {
+    return res.json(response.data);
+  }).catch((error) => {
+    return res.json({error: 'There has been a problem.'});
+  })
 });
-app.put('/jobs/:job_id/cancel', (req, res) => {
-  res.json({message: 'Cancelled job in SS'});
+
+app.put(`${process.env.ROOT_PATH}/jobs/:job_id/cancel`, (req, res) => {
+  return axios({
+    method: 'PUT',
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/cancel`,
+    proxy: false,
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
+    })
+  })
+  .then((response) => {
+    return res.json(response.data);
+  }).catch((error) => {
+    return res.json({error: 'There has been a problem.'});
+  })
 });
 
 var compiler = webpack(webpackConfig)

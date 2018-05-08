@@ -52,9 +52,6 @@
         Refresh
     </b-button>
     <div class="float-right">
-      <b-button variant="danger" @click="cancelJobs()" :disabled="!jobsSelected">
-          Cancel jobs
-      </b-button>
       <b-button variant="success" @click="startJobs()" :disabled="!jobsSelected">
           Start jobs
       </b-button>
@@ -70,6 +67,10 @@ axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
 const moment = require('moment');
 
+function translateDate(value) {
+  return ((value == null) ? '' : moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss'));
+}
+
 export default {
   name: 'queued-jobs',
   data() {
@@ -77,10 +78,11 @@ export default {
       fields: [
         { key: 'id', label: 'ID', sortable: true },
         { key: 'work-order-id', label: 'WO', sortable: true },
-        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: value => moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss') },
+        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'requested-by', label: 'Requested by', sortable: true },
-        { key: 'project', label: 'SS Study', sortable: true },
+        { key: 'project', label: 'Aker project', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
+        { key: 'product-options', label: 'Product Option', sortable: true },
         { key: 'process', label: 'Process', sortable: true },
         { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
@@ -137,28 +139,12 @@ export default {
           return [];
         });
     },
-    cancelJobs() {
-      this.items.forEach((item) => {
-        if (item.selected) {
-          axios({
-            method: 'put',
-            url: `/jobs/${item.id}/cancel`,
-          })
-            .then(() => {
-              this.refreshTable();
-              this.refreshCompletedJobsTable();
-            }).catch((error) => {
-              console.log(error);
-            });
-        }
-      });
-    },
     startJobs() {
       this.items.forEach((item) => {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `/jobs/${item.id}/start`,
+            url: `${process.env.ROOT_PATH}/jobs/${item.id}/start`,
           })
             .then(() => {
               this.refreshTable();
