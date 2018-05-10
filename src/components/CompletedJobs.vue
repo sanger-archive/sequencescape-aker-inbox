@@ -79,7 +79,7 @@ export default {
         { key: 'requested-by', label: 'Requested by', sortable: true },
         { key: 'project', label: 'Aker project', sortable: true },
         { key: 'product', label: 'Product', sortable: true },
-        { key: 'process', label: 'Process', sortable: true },
+        { key: 'product-options', label: 'Product Option', sortable: true },
         { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
