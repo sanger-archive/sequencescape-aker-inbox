@@ -78,7 +78,6 @@ export default {
         { key: 'cancelled', label: 'Date cancelled', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'requested-by', label: 'Requested by', sortable: true },
         { key: 'project', label: 'Aker project', sortable: true },
-        { key: 'product', label: 'Product', sortable: true },
         { key: 'process', label: 'Process', sortable: true },
         { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
