@@ -1,9 +1,7 @@
-import { mount } from '@vue/test-utils'
-import Vue from 'vue';
+import { mount } from '@vue/test-utils';
 import QueuedJobs from '@/components/QueuedJobs';
 
 describe('QueuedJobs.vue', () => {
-
   it('has a name', () => {
     expect(QueuedJobs.name).to.equal('queued-jobs');
   });
@@ -13,7 +11,7 @@ describe('QueuedJobs.vue', () => {
   });
 
   it('has a title', () => {
-    const wrapper = mount(QueuedJobs, { data: { totalQueuedJobs: 12 }});
+    const wrapper = mount(QueuedJobs, { data: { totalQueuedJobs: 12 } });
     expect(wrapper.html()).to.contain('Queued jobs (12)');
   });
 
@@ -25,7 +23,7 @@ describe('QueuedJobs.vue', () => {
   it('has set data defined', () => {
     const wrapper = mount(QueuedJobs);
 
-    expect(wrapper.vm.fields.length).to.eq(10);
+    expect(wrapper.vm.fields.length).to.eq(11);
     expect(wrapper.vm.isBusy).to.equal(false);
     expect(wrapper.vm.currentPage).to.equal(1);
     expect(wrapper.vm.perPage).to.equal(5);
@@ -35,6 +33,5 @@ describe('QueuedJobs.vue', () => {
     expect(wrapper.vm.sortDesc).to.equal(false);
     expect(wrapper.vm.items).to.be.a('array');
     expect(wrapper.vm.detailedItems).to.be.a('object');
-  })
-
+  });
 });
