@@ -100,7 +100,6 @@ export default {
       sortDesc: false,
       items: [],
       detailedItems: {
-        'desired-date': 'Desired Date',
         barcode: 'Barcode',
         'work-plan-comment': 'Comment',
       },
