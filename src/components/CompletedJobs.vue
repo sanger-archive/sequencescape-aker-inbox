@@ -94,7 +94,7 @@ export default {
       detailedItems: {
         'desired-date': 'Desired Date',
         barcode: 'Barcode',
-        comment: 'Comment',
+        'work-plan-comment': 'Comment',
         started: 'Start Date',
       },
     };
