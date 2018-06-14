@@ -145,7 +145,7 @@ export default {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `${process.env.ROOT_PATH}/jobs/${item.id}/start`,
+            url: `${process.env.ROOT_PATH}/jobs/${item.uuid}/start`,
           })
             .then(() => {
               this.refreshTable();
