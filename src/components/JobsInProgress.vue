@@ -143,7 +143,7 @@ export default {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `${process.env.ROOT_PATH}/jobs/${item.id}/cancel`,
+            url: `${process.env.ROOT_PATH}/jobs/${item.uuid}/cancel`,
           })
             .then(() => {
               this.refreshTable();
@@ -159,7 +159,7 @@ export default {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `${process.env.ROOT_PATH}/jobs/${item.id}/complete`,
+            url: `${process.env.ROOT_PATH}/jobs/${item.uuid}/complete`,
           })
             .then(() => {
               this.refreshTable();
