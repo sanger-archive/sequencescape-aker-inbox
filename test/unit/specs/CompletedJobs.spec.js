@@ -23,7 +23,7 @@ describe('CompletedJobs.vue', () => {
   it('has set data defined', () => {
     const wrapper = mount(CompletedJobs);
 
-    expect(wrapper.vm.fields.length).to.eq(11);
+    expect(wrapper.vm.fields.length).to.eq(12);
     expect(wrapper.vm.isBusy).to.equal(false);
     expect(wrapper.vm.currentPage).to.equal(1);
     expect(wrapper.vm.perPage).to.equal(5);
