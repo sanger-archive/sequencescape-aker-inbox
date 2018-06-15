@@ -113,7 +113,6 @@ export default {
       this.$root.$emit('bv::refresh::table', 'jobs-completed-table');
     },
     queuedJobsProvider(ctx) {
-      this.isBusy = true;
       return axios({
         url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
               + '?filter[status]=queued'

@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import CompletedJobs from '@/components/CompletedJobs';
 
 describe('CompletedJobs.vue', () => {
@@ -11,17 +11,18 @@ describe('CompletedJobs.vue', () => {
   });
 
   it('has a title', () => {
-    const wrapper = mount(CompletedJobs, { data: { totalCompletedJobs: 12 } });
+    const wrapper = shallowMount(CompletedJobs);
+    wrapper.setData({ totalCompletedJobs: 12 });
     expect(wrapper.html()).to.contain('Completed jobs (12)');
   });
 
   it('has a table', () => {
-    const wrapper = mount(CompletedJobs);
-    expect(wrapper.contains('b-table')).to.eq(true);
+    const wrapper = shallowMount(CompletedJobs);
+    expect(wrapper.contains('table')).to.eq(true);
   });
 
   it('has set data defined', () => {
-    const wrapper = mount(CompletedJobs);
+    const wrapper = shallowMount(CompletedJobs);
 
     expect(wrapper.vm.fields.length).to.eq(12);
     expect(wrapper.vm.isBusy).to.equal(false);
