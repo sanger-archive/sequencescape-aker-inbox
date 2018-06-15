@@ -80,7 +80,7 @@ export default {
         { key: 'work-order-id', label: 'WO', sortable: true },
         { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'requested-by', label: 'Requested by', sortable: true },
-        { key: 'project', label: 'Aker project', sortable: true },
+        { key: 'project-and-costcode', label: 'Aker Project (Costcode)', sortable: true },
         { key: 'process-modules', label: 'Process Modules', sortable: true },
         { key: 'process', label: 'Process', sortable: true },
         { key: 'priority', label: 'Priority', sortable: true },
@@ -113,7 +113,6 @@ export default {
       this.$root.$emit('bv::refresh::table', 'jobs-completed-table');
     },
     queuedJobsProvider(ctx) {
-      this.isBusy = true;
       return axios({
         url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
               + '?filter[status]=queued'

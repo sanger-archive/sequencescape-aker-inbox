@@ -1,4 +1,8 @@
 import Vue from 'vue';
+import BootstrapVue from 'bootstrap-vue';
+
+// Use BootstrapVue to prevent warnings during tests
+Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false;
 
