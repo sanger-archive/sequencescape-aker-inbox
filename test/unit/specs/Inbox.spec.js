@@ -1,8 +1,6 @@
 import { mount } from '@vue/test-utils';
 import Inbox from '@/components/Inbox';
 
-require('es6-promise').polyfill();
-
 describe('Inbox.vue', () => {
   it('has a name', () => {
     expect(Inbox.name).to.equal('app-container');
