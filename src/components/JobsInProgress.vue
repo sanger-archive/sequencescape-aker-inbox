@@ -84,9 +84,10 @@ export default {
         { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'started', label: 'Date started', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'requested-by', label: 'Requested by', sortable: true },
-        { key: 'project', label: 'Aker project', sortable: true },
+        { key: 'project-and-costcode', label: 'Aker Project (Costcode)', sortable: true },
         { key: 'process-modules', label: 'Process Modules', sortable: true },
         { key: 'process', label: 'Process', sortable: true },
+        { key: 'priority', label: 'Priority', sortable: true },
         { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
@@ -100,9 +101,8 @@ export default {
       sortDesc: false,
       items: [],
       detailedItems: {
-        'desired-date': 'Desired Date',
         barcode: 'Barcode',
-        comment: 'Comment',
+        'work-plan-comment': 'Comment',
       },
     };
   },
@@ -114,7 +114,6 @@ export default {
       this.$root.$emit('bv::refresh::table', 'jobs-completed-table');
     },
     startedJobsProvider(ctx) {
-      this.isBusy = true;
       return axios({
         url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
               + '?filter[status]=active'
@@ -124,7 +123,9 @@ export default {
       })
         .then((response) => {
           const items = response.data.data.map((item) => {
-            const formattedItem = Object.assign({ selected: false }, item, item.attributes);
+            const formattedItem = Object.assign(
+              { selected: false, _rowVariant: this.jobPriority(item) }, item, item.attributes,
+            );
             delete formattedItem.attributes;
             return formattedItem;
           });
@@ -144,7 +145,7 @@ export default {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `${process.env.ROOT_PATH}/jobs/${item.id}/cancel`,
+            url: `${process.env.ROOT_PATH}/jobs/${item.uuid}/cancel`,
           })
             .then(() => {
               this.refreshTable();
@@ -160,7 +161,7 @@ export default {
         if (item.selected) {
           axios({
             method: 'put',
-            url: `${process.env.ROOT_PATH}/jobs/${item.id}/complete`,
+            url: `${process.env.ROOT_PATH}/jobs/${item.uuid}/complete`,
           })
             .then(() => {
               this.refreshTable();
@@ -175,6 +176,9 @@ export default {
       this.items.forEach((itemInArray) => {
         if (itemInArray.id === item.id) item.selected = event;
       });
+    },
+    jobPriority(item) {
+      return item.attributes.priority === 'high' ? 'danger' : '';
     },
   },
   computed: {

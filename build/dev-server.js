@@ -41,10 +41,10 @@ const https = require('https')
 
 var app = express()
 
-app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
+app.put(`${process.env.ROOT_PATH}/jobs/:job_uuid/start`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/start`,
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_uuid}/start`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
@@ -57,10 +57,10 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/start`, (req, res) => {
   })
 });
 
-app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
+app.put(`${process.env.ROOT_PATH}/jobs/:job_uuid/complete`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/complete`,
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_uuid}/complete`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
@@ -73,10 +73,10 @@ app.put(`${process.env.ROOT_PATH}/jobs/:job_id/complete`, (req, res) => {
   })
 });
 
-app.put(`${process.env.ROOT_PATH}/jobs/:job_id/cancel`, (req, res) => {
+app.put(`${process.env.ROOT_PATH}/jobs/:job_uuid/cancel`, (req, res) => {
   return axios({
     method: 'PUT',
-    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_id}/cancel`,
+    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_uuid}/cancel`,
     proxy: false,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false

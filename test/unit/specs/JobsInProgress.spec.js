@@ -1,9 +1,7 @@
-import { mount } from '@vue/test-utils'
-import Vue from 'vue';
+import { shallowMount } from '@vue/test-utils';
 import JobsInProgress from '@/components/JobsInProgress';
 
 describe('JobsInProgress.vue', () => {
-
   it('has a name', () => {
     expect(JobsInProgress.name).to.equal('started-jobs');
   });
@@ -13,19 +11,20 @@ describe('JobsInProgress.vue', () => {
   });
 
   it('has a title', () => {
-    const wrapper = mount(JobsInProgress, { data: { totalStartedJobs: 12 }});
+    const wrapper = shallowMount(JobsInProgress);
+    wrapper.setData({ totalStartedJobs: 12 });
     expect(wrapper.html()).to.contain('Jobs in progress (12)');
   });
 
   it('has a table', () => {
-    const wrapper = mount(JobsInProgress);
-    expect(wrapper.contains('b-table')).to.eq(true);
+    const wrapper = shallowMount(JobsInProgress);
+    expect(wrapper.contains('table')).to.eq(true);
   });
 
   it('has set data defined', () => {
-    const wrapper = mount(JobsInProgress);
+    const wrapper = shallowMount(JobsInProgress);
 
-    expect(wrapper.vm.fields.length).to.eq(11);
+    expect(wrapper.vm.fields.length).to.eq(12);
     expect(wrapper.vm.isBusy).to.equal(false);
     expect(wrapper.vm.currentPage).to.equal(1);
     expect(wrapper.vm.perPage).to.equal(5);
@@ -35,6 +34,5 @@ describe('JobsInProgress.vue', () => {
     expect(wrapper.vm.sortDesc).to.equal(false);
     expect(wrapper.vm.items).to.be.a('array');
     expect(wrapper.vm.detailedItems).to.be.a('object');
-  })
-
+  });
 });

@@ -1,0 +1,27 @@
+# sudo: required
+git:
+  depth: false
+  submodules: false
+branches:
+  only:
+    - devel
+    - wip
+    - uat
+    - master
+language: node_js
+addons:
+  chrome: stable
+cache: yarn
+env:
+  global:
+    - CC_TEST_REPORTER_ID=a0d2ee3be59b9405db751a49ed37d5fd685b69ea5bee294c5ed802058a4df745
+install:
+  - yarn install
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - yarn unit
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
