@@ -6,8 +6,8 @@
       <b-navbar-brand href="#">Aker</b-navbar-brand>
 
       <b-navbar-nav>
-        <b-nav-item href="#" active>DNA pipeline</b-nav-item>
-        <b-nav-item href="#" >Cellular pipeline</b-nav-item>
+        <b-nav-item href="#" active>DNA Pipeline</b-nav-item>
+        <b-nav-item href="#" >Cellular Pipeline</b-nav-item>
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
