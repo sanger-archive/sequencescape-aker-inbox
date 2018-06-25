@@ -29,7 +29,7 @@
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
         <b-button size="sm" @click.stop="row.toggleDetails">
-          {{ row.detailsShowing ? 'Less' : 'More'}}...
+          {{ row.detailsShowing ? 'Less' : 'More'}}
         </b-button>
       </template>
       <template slot="selected" slot-scope="row">
