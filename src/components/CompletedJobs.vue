@@ -67,7 +67,7 @@ export default {
     return {
       fields: [
         { key: 'id', label: 'Job ID' },
-        { key: 'work-order-id', label: 'Work Order' },
+        { key: 'work-order-id', label: 'Work Order ID' },
         { key: 'date-requested', label: 'Date Requested', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'completed', label: 'Date Completed', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'cancelled', label: 'Date Cancelled', sortable: true, class: 'text-center', formatter: translateDate },

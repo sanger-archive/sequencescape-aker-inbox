@@ -72,7 +72,7 @@ export default {
     return {
       fields: [
         { key: 'id', label: 'Job ID' },
-        { key: 'work-order-id', label: 'Work Order' },
+        { key: 'work-order-id', label: 'Work Order ID' },
         { key: 'date-requested', label: 'Date Requested', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'requested-by', label: 'Requested by' },
         { key: 'project-and-costcode', label: 'Aker Project (Costcode)' },
