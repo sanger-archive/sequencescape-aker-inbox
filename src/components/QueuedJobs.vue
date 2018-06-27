@@ -8,6 +8,11 @@
       <b-col md="8" class="my-1">
         <b-pagination :total-rows="totalQueuedJobs" :per-page="perPage" v-model="currentPage" class="my-0" />
       </b-col>
+      <b-col md="4" class="my-1">
+        <b-form-group horizontal label="Per page" class="mb-0">
+          <b-form-select :options="pageOptions" v-model="perPage" />
+        </b-form-group>
+      </b-col>
     </b-row>
     <b-table id="jobs-queued-table"
              show-empty
@@ -19,7 +24,7 @@
              hover
              :busy.sync="isBusy"
              ref="qjt"
-             :perPage="8"
+             :perPage="perPage"
              :current-page="currentPage"
              :sort-by.sync="sortBy"
              :sort-desc.sync="sortDesc"
@@ -28,7 +33,7 @@
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
         <b-button size="sm" @click.stop="row.toggleDetails">
-          {{ row.detailsShowing ? 'Less' : 'More'}}
+          {{ row.detailsShowing ? 'Hide' : 'Show '}} Details
         </b-button>
       </template>
       <template slot="selected" slot-scope="row">
@@ -71,20 +76,22 @@ export default {
   data() {
     return {
       fields: [
-        { key: 'id', label: 'Job ID' },
-        { key: 'work-order-id', label: 'Work Order ID' },
-        { key: 'date-requested', label: 'Date Requested', sortable: true, class: 'text-center', formatter: translateDate },
-        { key: 'requested-by', label: 'Requested by' },
-        { key: 'project-and-costcode', label: 'Aker Project (Costcode)' },
-        { key: 'process', label: 'Process' },
-        { key: 'process-modules', label: 'Process Modules' },
+        { key: 'id', label: 'ID', sortable: true },
+        { key: 'work-order-id', label: 'WO', sortable: true },
+        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: translateDate },
+        { key: 'requested-by', label: 'Requested by', sortable: true },
+        { key: 'project-and-costcode', label: 'Aker Project (Costcode)', sortable: true },
+        { key: 'process-modules', label: 'Process Modules', sortable: true },
+        { key: 'process', label: 'Process', sortable: true },
         { key: 'priority', label: 'Priority', sortable: true },
-        { key: 'batch-size', label: '# samples' },
+        { key: 'batch-size', label: '# samples', sortable: true },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
       ],
       isBusy: false,
       currentPage: 1,
+      perPage: 5,
+      pageOptions: [5, 10, 15],
       totalQueuedJobs: 0,
       sortBy: 'date-requested',
       sortDesc: false,
