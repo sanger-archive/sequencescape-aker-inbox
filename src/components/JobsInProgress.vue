@@ -89,6 +89,7 @@ export default {
       ],
       isBusy: false,
       currentPage: 1,
+      perPage: 8,
       totalStartedJobs: 0,
       sortBy: 'date-requested',
       sortDesc: false,
