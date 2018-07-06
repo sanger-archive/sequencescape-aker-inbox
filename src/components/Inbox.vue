@@ -4,8 +4,8 @@
 
     <b-container fluid class="ct">
       <b-row>
-        <b-col md="12">
-          <h1>DNA Pipeline backlog</h1>
+        <b-col md="10" offset-md="1">
+          <h1>DNA pipeline backlog</h1>
           <hr>
           <queued-jobs></queued-jobs>
           <hr>
