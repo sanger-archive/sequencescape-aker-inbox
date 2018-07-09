@@ -1,4 +1,3 @@
-# sudo: required
 git:
   depth: false
   submodules: false
@@ -24,4 +23,14 @@ before_script:
 script:
   - yarn unit
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+  - yarn run build --report
+deploy:
+  provider: releases
+  api_key:
+    secure: te8u+yNtVxFlzsVvllaLbk/BnY8ljI8AVF/BTWvW4p+d9SK3dSpuWR3Uv8MhpHDum7tHxyXezdyWpWw9WVmn1Gp8fUf6eKzglnpkArG2Kn6wSH27flhm7PqcS2JLCWC4YPytj5Fbn1PejlP2ktQ4WPrwRVeeaMZh4Od56zmPepDMi2ABZqvEMl9oLckCRdnrwYKDg6dvbpqPUvPwkrvY/9fpz2kiyd0Ne89MVhfALU+K/H4V4rtVq8FNjVbaR7fMkyCjdUeLMWeEViY0ni08S9yMpkEz5qiUJmPFVosP3H0gOG0bjkooJmpk68ygUgaWrSPm2tPtFizJBHY7iR3Xi06lzq7KaO8qWaUfsX85OnvpjgTNa41bXG+4nznd5KwD/e0kU5o6vRKGaAv5Z3/0WagIT8S0VHzRIKsP6sgkgac1qoTaFFjCKbHTczKtNTqA7QOAiceYZM7H6sm23XsJP2RRShmZam8o1rjHzHWkNHlHm7YvZf1IvCDjHIOBjgXBMe7QTXRfD+wgcpQbmZhM+C3BxtrbAZjdxVQmq2E4W+7yg/Ff9v4/HXdR7egNmxDxe+tlVtTfRegjO6KWx/J5QmLqXzARQdMQ0FuFQkrawFY4qXoRF1R7+rs8b9B3GhewLCjztWeyP5HWW/hspxGqaVIc8v23bSHNrhAxlnPhB4Q=
+  file: public/*
+  skip_cleanup: true
+  on:
+    repo: sanger/sequencescape-aker-inbox
+    branch: fix-deployment
