@@ -1,12 +1,6 @@
 git:
   depth: false
   submodules: false
-branches:
-  only:
-    - devel
-    - wip
-    - uat
-    - master
 language: node_js
 addons:
   chrome: stable
