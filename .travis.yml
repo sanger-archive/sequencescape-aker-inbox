@@ -4,8 +4,7 @@ git:
   depth: false
   submodules: false
 addons:
-  # use headless chrome for testing
-  chrome: stable
+  chrome: stable # use headless chrome for testing
 branches:
   only:
     - devel
@@ -30,7 +29,7 @@ before_deploy: # we only want to build and create a release if it is a push of a
   - if [[ "$TRAVIS_BRANCH" == "uat" ]]; then rm config/prod.env.js; mv config/wip.env.js config/prod.env.js; fi
   - yarn run build --report
   - tar -zcf ${PUBLIC_ASSETS}.tar.gz public
-  - git tag "${TRAVIS_BRANCH}/$(date +'%Y-%m%d/%H%M%S')/$(git log --format=%h -1)"
+  - git tag "${TRAVIS_BRANCH}/$(date +'%Y-%m-%d/%H%M%S')/$(git log --format=%h -1)"
 deploy:
   provider: releases
   api_key:
