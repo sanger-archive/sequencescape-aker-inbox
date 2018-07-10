@@ -15,6 +15,9 @@ env:
   global:
     - PUBLIC_ASSETS=assets
     - CC_TEST_REPORTER_ID=a0d2ee3be59b9405db751a49ed37d5fd685b69ea5bee294c5ed802058a4df745
+before_install:
+  - export TZ=Europe/London
+  - date
 install:
   - yarn install
 before_script:
