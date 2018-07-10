@@ -19,7 +19,7 @@
              hover
              :busy.sync="isBusy"
              ref="qjt"
-             :perPage="8"
+             :perPage="perPage"
              :current-page="currentPage"
              :detailedItems="detailedItems"
              :sort-by.sync="sortBy"
@@ -81,6 +81,7 @@ export default {
       ],
       isBusy: false,
       currentPage: 1,
+      perPage: 8,
       totalCompletedJobs: 0,
       sortBy: 'date-requested',
       sortDesc: false,
