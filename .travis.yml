@@ -7,15 +7,12 @@ addons:
   # use headless chrome for testing
   chrome: stable
 branches:
-  # we are only interested in testing pull requests and pushes to these branches
   only:
     - devel
     - wip
     - uat
     - master
 env:
-  # define some environmental variables and define in global which will make them all available in
-  #   all jobs
   global:
     - PUBLIC_ASSETS=assets
     - CC_TEST_REPORTER_ID=a0d2ee3be59b9405db751a49ed37d5fd685b69ea5bee294c5ed802058a4df745
@@ -27,8 +24,7 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - yarn unit
-before_deploy:
-  # we only want to build and create a release if it is a push of a branch, not any pull request
+before_deploy: # we only want to build and create a release if it is a push of a branch, not any pull request
   - if [[ "$TRAVIS_BRANCH" == "wip" ]]; then rm config/prod.env.js; mv config/wip.env.js config/prod.env.js; fi
   - if [[ "$TRAVIS_BRANCH" == "uat" ]]; then rm config/prod.env.js; mv config/wip.env.js config/prod.env.js; fi
   - yarn run build --report
@@ -45,6 +41,5 @@ deploy:
     repo: sanger/sequencescape-aker-inbox
     all_branches: true
     condition: $TRAVIS_BRANCH =~ ^wip|uat|master$
-after_script:
-  # only upload code coverage report on pull requests to devel
+after_script: # only upload code coverage report on pull requests to devel
   - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "TRAVIS_BRANCH" == "devel" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
