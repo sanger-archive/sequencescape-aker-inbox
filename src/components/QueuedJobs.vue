@@ -5,7 +5,7 @@
       These jobs can be reprioritised (ordered by request date by default)
     </p>
     <b-row>
-      <b-col md="8" class="my-1">
+      <b-col md="12" class="my-1">
         <b-pagination :total-rows="totalQueuedJobs" :per-page="perPage" v-model="currentPage" class="my-0" />
       </b-col>
     </b-row>
@@ -21,9 +21,8 @@
              ref="qjt"
              :perPage="perPage"
              :current-page="currentPage"
-             :sort-by.sync="sortBy"
-             :sort-desc.sync="sortDesc"
-             no-provider-sorting
+             :sortBy="sortBy"
+             no-local-sorting
     >
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
@@ -57,6 +56,7 @@
 
 <script>
 import axios from 'axios';
+import sortable from '../mixins/sortable';
 
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
@@ -68,6 +68,7 @@ function translateDate(value) {
 
 export default {
   name: 'queued-jobs',
+  mixins: [sortable],
   data() {
     return {
       fields: [
@@ -76,8 +77,8 @@ export default {
         { key: 'date-requested', label: 'Date Requested', sortable: true, class: 'text-center', formatter: translateDate },
         { key: 'requested-by', label: 'Requested by' },
         { key: 'project-and-costcode', label: 'Aker Project (Costcode)' },
-        { key: 'process', label: 'Process' },
         { key: 'process-modules', label: 'Process Modules' },
+        { key: 'process', label: 'Process' },
         { key: 'priority', label: 'Priority', sortable: true },
         { key: 'batch-size', label: '# samples' },
         { key: 'details', label: '' },
@@ -111,7 +112,8 @@ export default {
         url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
               + '?filter[status]=queued'
               + `&page[number]=${ctx.currentPage}`
-              + `&page[size]=${ctx.perPage}`,
+              + `&page[size]=${ctx.perPage}`
+              + `&${this.sortValue(ctx)}`,
         method: 'GET',
       })
         .then((response) => {
