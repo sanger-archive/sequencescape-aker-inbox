@@ -5,7 +5,7 @@
       These jobs have been completed or cancelled
     </p>
     <b-row>
-      <b-col md="8" class="my-1">
+      <b-col md="12" class="my-1">
         <b-pagination :total-rows="totalCompletedJobs" :per-page="perPage" v-model="currentPage" class="my-0" />
       </b-col>
     </b-row>
@@ -22,9 +22,8 @@
              :perPage="perPage"
              :current-page="currentPage"
              :detailedItems="detailedItems"
-             :sort-by.sync="sortBy"
-             :sort-desc.sync="sortDesc"
-             no-provider-sorting
+             :sortBy="sortBy"
+             no-local-sorting
     >
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
@@ -52,6 +51,7 @@
 
 <script>
 import axios from 'axios';
+import sortable from '../mixins/sortable';
 
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
@@ -63,6 +63,7 @@ function translateDate(value) {
 
 export default {
   name: 'completed-jobs',
+  mixins: [sortable],
   data() {
     return {
       fields: [
@@ -105,7 +106,8 @@ export default {
         url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
               + '?filter[status]=concluded'
               + `&page[number]=${ctx.currentPage}`
-              + `&page[size]=${ctx.perPage}`,
+              + `&page[size]=${ctx.perPage}`
+              + `&${this.sortValue(ctx)}`,
         method: 'GET',
       })
         .then((response) => {
