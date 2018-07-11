@@ -1,20 +1,23 @@
-# sudo: required
+language: node_js
+cache: yarn
 git:
   depth: false
   submodules: false
+addons:
+  chrome: stable # use headless chrome for testing
 branches:
   only:
     - devel
     - wip
     - uat
     - master
-language: node_js
-addons:
-  chrome: stable
-cache: yarn
 env:
   global:
+    - STATIC_ASSETS=static
     - CC_TEST_REPORTER_ID=a0d2ee3be59b9405db751a49ed37d5fd685b69ea5bee294c5ed802058a4df745
+before_install:
+  - export TZ=Europe/London
+  - date
 install:
   - yarn install
 before_script:
@@ -23,5 +26,25 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - yarn unit
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+before_deploy: # we only want to build and create a release if it is a push of a branch, not any pull request
+  - echo "TRAVIS_BRANCH:" ${TRAVIS_BRANCH}
+  - if [[ "$TRAVIS_BRANCH" == "wip" ]]; then rm config/prod.env.js; mv config/wip.env.js config/prod.env.js; fi
+  - if [[ "$TRAVIS_BRANCH" == "uat" ]]; then rm config/prod.env.js; mv config/wip.env.js config/prod.env.js; fi
+  - yarn run build --report
+  - tar -zcf ${STATIC_ASSETS}.tar.gz -C public .
+  - git tag "${TRAVIS_BRANCH}/$(date +'%Y-%m-%d/%H%M%S')/$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key:
+    secure: te8u+yNtVxFlzsVvllaLbk/BnY8ljI8AVF/BTWvW4p+d9SK3dSpuWR3Uv8MhpHDum7tHxyXezdyWpWw9WVmn1Gp8fUf6eKzglnpkArG2Kn6wSH27flhm7PqcS2JLCWC4YPytj5Fbn1PejlP2ktQ4WPrwRVeeaMZh4Od56zmPepDMi2ABZqvEMl9oLckCRdnrwYKDg6dvbpqPUvPwkrvY/9fpz2kiyd0Ne89MVhfALU+K/H4V4rtVq8FNjVbaR7fMkyCjdUeLMWeEViY0ni08S9yMpkEz5qiUJmPFVosP3H0gOG0bjkooJmpk68ygUgaWrSPm2tPtFizJBHY7iR3Xi06lzq7KaO8qWaUfsX85OnvpjgTNa41bXG+4nznd5KwD/e0kU5o6vRKGaAv5Z3/0WagIT8S0VHzRIKsP6sgkgac1qoTaFFjCKbHTczKtNTqA7QOAiceYZM7H6sm23XsJP2RRShmZam8o1rjHzHWkNHlHm7YvZf1IvCDjHIOBjgXBMe7QTXRfD+wgcpQbmZhM+C3BxtrbAZjdxVQmq2E4W+7yg/Ff9v4/HXdR7egNmxDxe+tlVtTfRegjO6KWx/J5QmLqXzARQdMQ0FuFQkrawFY4qXoRF1R7+rs8b9B3GhewLCjztWeyP5HWW/hspxGqaVIc8v23bSHNrhAxlnPhB4Q=
+  file_glob: true
+  file: ${STATIC_ASSETS}.tar.gz
+  skip_cleanup: true
+  on:
+    repo: sanger/sequencescape-aker-inbox
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^devel|wip|uat|master$
+after_script: # only upload code coverage report on pull requests to devel
+  - echo "TRAVIS_PULL_REQUEST:" ${TRAVIS_PULL_REQUEST}
+  - echo "TRAVIS_BRANCH:" ${TRAVIS_BRANCH}
+  - if [[ "$TRAVIS_PULL_REQUEST" == "false" && "TRAVIS_BRANCH" == "devel" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
