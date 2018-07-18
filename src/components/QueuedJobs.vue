@@ -5,13 +5,8 @@
       These jobs can be reprioritised (ordered by request date by default)
     </p>
     <b-row>
-      <b-col md="8" class="my-1">
+      <b-col md="12" class="my-1">
         <b-pagination :total-rows="totalQueuedJobs" :per-page="perPage" v-model="currentPage" class="my-0" />
-      </b-col>
-      <b-col md="4" class="my-1">
-        <b-form-group horizontal label="Per page" class="mb-0">
-          <b-form-select :options="pageOptions" v-model="perPage" />
-        </b-form-group>
       </b-col>
     </b-row>
     <b-table id="jobs-queued-table"
@@ -26,14 +21,13 @@
              ref="qjt"
              :perPage="perPage"
              :current-page="currentPage"
-             :sort-by.sync="sortBy"
-             :sort-desc.sync="sortDesc"
-             no-provider-sorting
+             :sortBy="sortBy"
+             no-local-sorting
     >
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
         <b-button size="sm" @click.stop="row.toggleDetails">
-          {{ row.detailsShowing ? 'Hide' : 'Show '}} Details
+          {{ row.detailsShowing ? 'Less' : 'More'}}
         </b-button>
       </template>
       <template slot="selected" slot-scope="row">
@@ -62,6 +56,7 @@
 
 <script>
 import axios from 'axios';
+import sortable from '../mixins/sortable';
 
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
@@ -73,25 +68,25 @@ function translateDate(value) {
 
 export default {
   name: 'queued-jobs',
+  mixins: [sortable],
   data() {
     return {
       fields: [
-        { key: 'id', label: 'ID', sortable: true },
-        { key: 'work-order-id', label: 'WO', sortable: true },
-        { key: 'date-requested', label: 'Date requested', sortable: true, class: 'text-center', formatter: translateDate },
-        { key: 'requested-by', label: 'Requested by', sortable: true },
-        { key: 'project-and-costcode', label: 'Aker Project (Costcode)', sortable: true },
-        { key: 'process-modules', label: 'Process Modules', sortable: true },
-        { key: 'process', label: 'Process', sortable: true },
+        { key: 'id', label: 'Job ID' },
+        { key: 'work-order-id', label: 'Work Order ID' },
+        { key: 'date-requested', label: 'Date Requested', sortable: true, class: 'text-center', formatter: translateDate },
+        { key: 'requested-by', label: 'Requested by' },
+        { key: 'project-and-costcode', label: 'Aker Project (Costcode)' },
+        { key: 'process', label: 'Process' },
+        { key: 'process-modules', label: 'Process Modules' },
         { key: 'priority', label: 'Priority', sortable: true },
-        { key: 'batch-size', label: '# samples', sortable: true },
+        { key: 'batch-size', label: '# samples' },
         { key: 'details', label: '' },
         { key: 'selected', label: '' },
       ],
       isBusy: false,
       currentPage: 1,
-      perPage: 5,
-      pageOptions: [5, 10, 15],
+      perPage: 8,
       totalQueuedJobs: 0,
       sortBy: 'date-requested',
       sortDesc: false,
@@ -117,7 +112,8 @@ export default {
         url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
               + '?filter[status]=queued'
               + `&page[number]=${ctx.currentPage}`
-              + `&page[size]=${ctx.perPage}`,
+              + `&page[size]=${ctx.perPage}`
+              + `&${this.sortValue(ctx)}`,
         method: 'GET',
       })
         .then((response) => {

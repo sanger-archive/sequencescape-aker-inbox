@@ -27,8 +27,7 @@ describe('QueuedJobs.vue', () => {
     expect(wrapper.vm.fields.length).to.eq(11);
     expect(wrapper.vm.isBusy).to.equal(false);
     expect(wrapper.vm.currentPage).to.equal(1);
-    expect(wrapper.vm.perPage).to.equal(5);
-    expect(wrapper.vm.pageOptions).to.be.a('array');
+    expect(wrapper.vm.perPage).to.equal(8);
     expect(wrapper.vm.totalQueuedJobs).to.equal(0);
     expect(wrapper.vm.sortBy).to.equal('date-requested');
     expect(wrapper.vm.sortDesc).to.equal(false);
