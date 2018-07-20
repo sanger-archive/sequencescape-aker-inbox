@@ -24,6 +24,7 @@
              :detailedItems="detailedItems"
              :sortBy="sortBy"
              no-local-sorting
+             no-sort-reset
     >
       <template slot="index" slot-scope="row">{{ row.index + 1 }}</template>
       <template slot="details" slot-scope="row">
