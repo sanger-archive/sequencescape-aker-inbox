@@ -39,6 +39,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 Travis will only deploy assets to a release when the build is not a pull request, i.e. a push to a
 branch.
 
+
 ### Useful links
 * [This](https://blog.sqreen.io/authentication-best-practices-vue/) guide was helpful for authentication set-up.
 * [json-server](https://github.com/typicode/json-server) to mock a REST API locally.
