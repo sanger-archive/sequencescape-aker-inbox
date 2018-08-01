@@ -28,6 +28,7 @@ script:
   - yarn unit
 before_deploy: # we only want to build and create a release if it is a push of a branch, not any pull request
   - echo "TRAVIS_BRANCH:" ${TRAVIS_BRANCH}
+  - if [[ "$TRAVIS_BRANCH" == "devel" ]]; then rm config/prod.env.js; mv config/disp.env.js config/prod.env.js; fi
   - if [[ "$TRAVIS_BRANCH" == "wip" ]]; then rm config/prod.env.js; mv config/wip.env.js config/prod.env.js; fi
   - if [[ "$TRAVIS_BRANCH" == "uat" ]]; then rm config/prod.env.js; mv config/uat.env.js config/prod.env.js; fi
   - yarn run build --report
