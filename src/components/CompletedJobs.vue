@@ -59,7 +59,7 @@ axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 const moment = require('moment');
 
 function translateDate(value) {
-  return ((value == null) ? '' : moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss'));
+  return ((value == null) ? '' : moment(value).utcOffset(0).format('DD-MM-YYYY HH:mm:ss'));
 }
 
 export default {

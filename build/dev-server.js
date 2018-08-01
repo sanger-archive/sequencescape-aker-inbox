@@ -8,19 +8,6 @@ var config = require('../config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
-
-if (!process.env.WORK_ORDER_URL) {
-  process.env.WORK_ORDER_URL = JSON.parse(config.dev.env.WORK_ORDER_URL)
-}
-
-if (!process.env.ROOT_PATH) {
-  process.env.ROOT_PATH = JSON.parse(config.dev.env.ROOT_PATH)
-}
-
-if (!process.env.SS_URL) {
-  process.env.SS_URL = JSON.parse(config.dev.env.SS_URL)
-}
-
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
@@ -40,54 +27,6 @@ var proxyTable = config.dev.proxyTable
 const https = require('https')
 
 var app = express()
-
-app.put(`${process.env.ROOT_PATH}/jobs/:job_uuid/start`, (req, res) => {
-  return axios({
-    method: 'PUT',
-    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_uuid}/start`,
-    proxy: false,
-    httpsAgent: new https.Agent({
-      rejectUnauthorized: false
-    })
-  })
-  .then((response) => {
-    return res.json(response.data);
-  }).catch((error) => {
-    return res.json({error: 'There has been a problem.'});
-  })
-});
-
-app.put(`${process.env.ROOT_PATH}/jobs/:job_uuid/complete`, (req, res) => {
-  return axios({
-    method: 'PUT',
-    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_uuid}/complete`,
-    proxy: false,
-    httpsAgent: new https.Agent({
-      rejectUnauthorized: false
-    })
-  })
-  .then((response) => {
-    return res.json(response.data);
-  }).catch((error) => {
-    return res.json({error: 'There has been a problem.'});
-  })
-});
-
-app.put(`${process.env.ROOT_PATH}/jobs/:job_uuid/cancel`, (req, res) => {
-  return axios({
-    method: 'PUT',
-    url: `${process.env.SS_URL}/aker/jobs/${req.params.job_uuid}/cancel`,
-    proxy: false,
-    httpsAgent: new https.Agent({
-      rejectUnauthorized: false
-    })
-  })
-  .then((response) => {
-    return res.json(response.data);
-  }).catch((error) => {
-    return res.json({error: 'There has been a problem.'});
-  })
-});
 
 var compiler = webpack(webpackConfig)
 
@@ -147,7 +86,6 @@ devMiddleware.waitUntilValid(() => {
   }
   _resolve()
 })
-
 
 var server = app.listen(port)
 
