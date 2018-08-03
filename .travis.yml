@@ -34,7 +34,7 @@ before_deploy: # we only want to build and create a release if it is a push of a
   - if [[ "$TRAVIS_BRANCH" == "uat" ]]; then rm config/prod.env.js; mv config/uat.env.js config/prod.env.js; fi
   - yarn run build --report
   - tar -zcf ${STATIC_ASSETS}.tar.gz -C public .
-  - set TAG_NAME=${TRAVIS_BRANCH}/$(date +'%Y-%m-%d/%H%M%S')/$(git log --format=%h -1)
+  - export TAG_NAME=${TRAVIS_BRANCH}/$(date +'%Y-%m-%d/%H%M%S')/$(git log --format=%h -1)
   - git tag "${TAG_NAME}"
 deploy:
   provider: releases
@@ -47,7 +47,7 @@ deploy:
   on:
     repo: sanger/sequencescape-aker-inbox
     all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^devel|wip|uat|master$
+    # condition: $TRAVIS_BRANCH =~ ^devel|wip|uat|master$
 after_script: # only upload code coverage report on pull requests to devel
   - echo "TRAVIS_PULL_REQUEST:" ${TRAVIS_PULL_REQUEST}
   - echo "TRAVIS_BRANCH:" ${TRAVIS_BRANCH}
