@@ -111,7 +111,7 @@ export default {
     },
     startedJobsProvider(ctx) {
       return axios({
-        url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
+        url: `${process.env.AKER_URL}/work/api/v1/jobs`
               + '?filter[status]=active'
               + `&page[number]=${ctx.currentPage}`
               + `&page[size]=${ctx.perPage}`
