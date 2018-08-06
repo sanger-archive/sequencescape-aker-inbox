@@ -38,7 +38,14 @@
       <template slot="row-details" slot-scope="row">
         <b-card>
           <ul>
-            <li v-for="(label, key) in detailedItems" :key="key"><strong>{{ label }}</strong>: {{ row.item[key] }}</li>
+            <li v-for="(label, key) in detailedItems" :key="key">
+              <div v-if="key === 'set-uuid'">
+                <a v-bind:href="createSetLink(row.item[key])" target="_blank">View set</a>
+              </div>
+              <div v-else>
+                <strong>{{ label }}:</strong> {{ row.item[key] }}
+              </div>
+            </li>
           </ul>
         </b-card>
       </template>
@@ -92,6 +99,7 @@ export default {
         barcode: 'Barcode',
         'work-plan-comment': 'Comment',
         started: 'Start Date',
+        'set-uuid': 'Set UUID',
       },
     };
   },
@@ -137,6 +145,9 @@ export default {
     },
     jobPriority(item) {
       return item.attributes.priority === 'high' ? 'danger' : '';
+    },
+    createSetLink(setUuid) {
+      return `${process.env.AKER_URL}/set/simple/sets/${setUuid}`;
     },
   },
   computed: {
