@@ -110,7 +110,7 @@ export default {
     },
     queuedJobsProvider(ctx) {
       return axios({
-        url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
+        url: `${process.env.AKER_URL}/work/api/v1/jobs`
               + '?filter[status]=queued'
               + `&page[number]=${ctx.currentPage}`
               + `&page[size]=${ctx.perPage}`

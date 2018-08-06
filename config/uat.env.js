@@ -1,5 +1,5 @@
 module.exports = {
   NODE_ENV: '"production"',
-  WORK_ORDER_URL: '"https://uat.aker.sanger.ac.uk/work"',
+  AKER_URL: '"https://uat.aker.sanger.ac.uk"',
   SS_URL: '"http://dev.psd.sanger.ac.uk:6630"',
 }
