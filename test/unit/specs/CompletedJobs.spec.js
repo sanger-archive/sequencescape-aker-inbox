@@ -18,7 +18,7 @@ describe('CompletedJobs.vue', () => {
 
   it('has a table', () => {
     const wrapper = shallowMount(CompletedJobs);
-    expect(wrapper.contains('table')).to.eq(true);
+    expect(wrapper.contains('#jobs-completed-table')).to.eq(true);
   });
 
   it('has set data defined', () => {

@@ -64,7 +64,7 @@ axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 const moment = require('moment');
 
 function translateDate(value) {
-  return ((value == null) ? '' : moment(value).zone(0).format('DD-MM-YYYY HH:mm:ss'));
+  return ((value == null) ? '' : moment(value).utcOffset(0).format('DD-MM-YYYY HH:mm:ss'));
 }
 
 export default {
@@ -110,7 +110,7 @@ export default {
     },
     queuedJobsProvider(ctx) {
       return axios({
-        url: `${process.env.WORK_ORDER_URL}/api/v1/jobs`
+        url: `${process.env.AKER_URL}/work/api/v1/jobs`
               + '?filter[status]=queued'
               + `&page[number]=${ctx.currentPage}`
               + `&page[size]=${ctx.perPage}`
@@ -140,8 +140,8 @@ export default {
       this.items.forEach((item) => {
         if (item.selected) {
           axios({
-            method: 'put',
-            url: `${process.env.ROOT_PATH}/jobs/${item.uuid}/start`,
+            method: 'PUT',
+            url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/start`,
           })
             .then(() => {
               this.refreshTable();
