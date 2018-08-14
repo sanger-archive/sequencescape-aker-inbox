@@ -39,8 +39,8 @@
         <b-card>
           <ul>
             <li v-for="(label, key) in detailedItems" :key="key">
-              <div v-if="key === 'set-uuid'">
-                <a v-bind:href="createSetLink(row.item[key])" target="_blank">View set</a>
+              <div v-if="key === 'set-uuid' || key == 'input-set-uuid'">
+                <a v-bind:href="createSetLink(row.item[key])" target="_blank">{{ label }}</a>
               </div>
               <div v-else>
                 <strong>{{ label }}:</strong> {{ row.item[key] }}
@@ -60,6 +60,7 @@
 <script>
 import axios from 'axios';
 import sortable from '../mixins/sortable';
+import setLinkable from '../mixins/set-linkable';
 
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
@@ -71,7 +72,7 @@ function translateDate(value) {
 
 export default {
   name: 'completed-jobs',
-  mixins: [sortable],
+  mixins: [sortable, setLinkable],
   data() {
     return {
       fields: [
@@ -99,7 +100,8 @@ export default {
         barcode: 'Barcode',
         'work-plan-comment': 'Comment',
         started: 'Start Date',
-        'set-uuid': 'Set UUID',
+        'input-set-uuid': 'View Input Set',
+        'set-uuid': 'View Output Set',
       },
     };
   },
@@ -145,9 +147,6 @@ export default {
     },
     jobPriority(item) {
       return item.attributes.priority === 'high' ? 'danger' : '';
-    },
-    createSetLink(setUuid) {
-      return `${process.env.AKER_URL}/set/simple/sets/${setUuid}`;
     },
   },
   computed: {
