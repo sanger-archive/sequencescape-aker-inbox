@@ -37,7 +37,14 @@
       <template slot="row-details" slot-scope="row">
         <b-card>
           <ul>
-            <li v-for="(label, key) in detailedItems" :key="key"><strong>{{ label }}</strong>: {{ row.item[key] }}</li>
+            <li v-for="(label, key) in detailedItems" :key="key">
+              <div v-if="key == 'input-set-uuid'">
+                <a v-bind:href="createSetLink(row.item[key])" target="_blank">{{ label }}</a>
+              </div>
+              <div v-else>
+                <strong>{{ label }}:</strong> {{ row.item[key] }}
+              </div>
+            </li>
           </ul>
         </b-card>
       </template>
@@ -61,6 +68,7 @@
 <script>
 import axios from 'axios';
 import sortable from '../mixins/sortable';
+import setLinkable from '../mixins/set-linkable';
 
 axios.defaults.headers.common['Content-type'] = 'application/vnd.api+json';
 
@@ -72,7 +80,7 @@ function translateDate(value) {
 
 export default {
   name: 'started-jobs',
-  mixins: [sortable],
+  mixins: [sortable, setLinkable],
   data() {
     return {
       fields: [
@@ -99,6 +107,7 @@ export default {
       detailedItems: {
         barcode: 'Barcode',
         'work-plan-comment': 'Comment',
+        'input-set-uuid': 'View Input Set',
       },
     };
   },
