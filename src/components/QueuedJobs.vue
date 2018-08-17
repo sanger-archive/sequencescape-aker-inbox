@@ -146,20 +146,18 @@ export default {
         });
     },
     startJobs() {
-      this.items.forEach((item) => {
-        if (item.selected) {
-          axios({
-            method: 'PUT',
-            url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/start`,
-          })
-            .then(() => {
-              this.refreshTable();
-              this.refreshStartedJobsTable();
-            }).catch((error) => {
-              console.log(error);
-            });
-        }
-      });
+      const requests = this.items
+        .filter(item => item.selected)
+        .map(item => axios({ method: 'PUT', url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/start` }));
+
+      return axios.all(requests)
+        .catch((error) => {
+          console.log(error);
+        })
+        .then(() => {
+          this.refreshTable();
+          this.refreshStartedJobsTable();
+        });
     },
     toggleSelectedJob(item, index, event) {
       this.items.forEach((itemInArray) => {
@@ -168,6 +166,9 @@ export default {
     },
     jobPriority(item) {
       return item.attributes.priority === 'high' ? 'danger' : '';
+    },
+    selectedItems() {
+      this.items.filter(item => item.selected);
     },
   },
   computed: {

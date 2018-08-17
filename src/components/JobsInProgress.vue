@@ -147,36 +147,29 @@ export default {
         });
     },
     cancelJobs() {
-      this.items.forEach((item) => {
-        if (item.selected) {
-          axios({
-            method: 'PUT',
-            url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/cancel`,
-          })
-            .then(() => {
-              this.refreshTable();
-              this.refreshCompletedJobsTable();
-            }).catch((error) => {
-              console.log(error);
-            });
-        }
-      });
+      const requests = this.selectedItems()
+        .map(item => axios({ method: 'PUT', url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/cancel` }));
+
+      return axios.all(requests)
+        .then(() => {
+          this.refreshTable();
+          this.refreshCompletedJobsTable();
+        }).catch((error) => {
+          console.log(error);
+        });
     },
     completeJobs() {
-      this.items.forEach((item) => {
-        if (item.selected) {
-          axios({
-            method: 'PUT',
-            url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/complete`,
-          })
-            .then(() => {
-              this.refreshTable();
-              this.refreshCompletedJobsTable();
-            }).catch((error) => {
-              console.log(error);
-            });
-        }
-      });
+      const requests = this.selectedItems()
+        .map(item => axios({ method: 'PUT', url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/complete` }));
+
+      return axios.all(requests)
+        .catch((error) => {
+          console.log(error);
+        })
+        .then(() => {
+          this.refreshTable();
+          this.refreshCompletedJobsTable();
+        });
     },
     toggleSelectedJob(item, index, event) {
       this.items.forEach((itemInArray) => {
@@ -185,6 +178,9 @@ export default {
     },
     jobPriority(item) {
       return item.attributes.priority === 'high' ? 'danger' : '';
+    },
+    selectedItems() {
+      this.items.filter(item => item.selected);
     },
   },
   computed: {
