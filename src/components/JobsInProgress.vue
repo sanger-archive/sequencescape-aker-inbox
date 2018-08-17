@@ -163,11 +163,12 @@ export default {
         .map(item => axios({ method: 'PUT', url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/complete` }));
 
       return axios.all(requests)
+        .catch((error) => {
+          console.log(error);
+        })
         .then(() => {
           this.refreshTable();
           this.refreshCompletedJobsTable();
-        }).catch((error) => {
-          console.log(error);
         });
     },
     toggleSelectedJob(item, index, event) {
