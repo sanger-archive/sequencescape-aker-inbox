@@ -159,7 +159,7 @@ export default {
         });
     },
     completeJobs() {
-      const requests = this.selectedItems()
+      const requests = this.selectedItems
         .map(item => axios({ method: 'PUT', url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/complete` }));
 
       return axios.all(requests)
@@ -179,13 +179,13 @@ export default {
     jobPriority(item) {
       return item.attributes.priority === 'high' ? 'danger' : '';
     },
-    selectedItems() {
-      this.items.filter(item => item.selected);
-    },
   },
   computed: {
     jobsSelected() {
       return this.items.some(item => item.selected);
+    },
+    selectedItems() {
+      this.items.filter(item => item.selected);
     },
   },
 };

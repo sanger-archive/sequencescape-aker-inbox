@@ -146,8 +146,7 @@ export default {
         });
     },
     startJobs() {
-      const requests = this.items
-        .filter(item => item.selected)
+      const requests = this.selectedItems
         .map(item => axios({ method: 'PUT', url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/start` }));
 
       return axios.all(requests)
@@ -167,13 +166,13 @@ export default {
     jobPriority(item) {
       return item.attributes.priority === 'high' ? 'danger' : '';
     },
-    selectedItems() {
-      this.items.filter(item => item.selected);
-    },
   },
   computed: {
     jobsSelected() {
       return this.items.some(item => item.selected);
+    },
+    selectedItems() {
+      this.items.filter(item => item.selected);
     },
   },
 };
