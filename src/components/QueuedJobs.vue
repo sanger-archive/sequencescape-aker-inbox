@@ -146,7 +146,7 @@ export default {
         });
     },
     startJobs() {
-      const requests = this.selectedItems
+      const requests = this.items.filter(item => item.selected)
         .map(item => axios({ method: 'PUT', url: `${process.env.SS_URL}/aker/jobs/${item.uuid}/start` }));
 
       return axios.all(requests)
@@ -170,9 +170,6 @@ export default {
   computed: {
     jobsSelected() {
       return this.items.some(item => item.selected);
-    },
-    selectedItems() {
-      this.items.filter(item => item.selected);
     },
   },
 };
